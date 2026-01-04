@@ -1,13 +1,35 @@
-import { setUser } from "./config.js";
-import { readConfig } from "./config.js";
+import {
+    type CommandsRegistry,
+    registerCommand,
+    runCommand
+} from "./commands/commands.js";
+import { handlerLogin } from "./commands/users.js";
 
 function main() {
-    // Set current user and update config file on disk.
-    setUser("Levi");
-    // Read config again, parse it into object and print to terminal
-    const cfg = readConfig();
-    console.log(cfg);
-
+    // get any additionally passed arguments 
+    const args = process.argv.slice(2);
+    //
+    if (args.length < 1) {
+        console.log("usage: cli <command> [args...]");
+        process.exit(1);
+    }
+    //
+    const cmdName = args[0];
+    const cmdArgs = args.slice(1);
+    const commandsRegistry: CommandsRegistry = {};
+    //
+    registerCommand(commandsRegistry, "login", handlerLogin);
+    //
+    try {
+        runCommand(commandsRegistry, cmdName, ...cmdArgs);
+    } catch (err) {
+        if (err instanceof Error) {
+            console.error(`Error running command ${cmdName}: ${err.message}}`);
+        } else {
+            console.error(`Error running command ${cmdName}: ${err}}`);
+        }
+        process.exit(1);
+    }
 };
 
 main();
