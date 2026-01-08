@@ -2,9 +2,13 @@ import {
     CommandsRegistry,
     registerCommand,
     runCommand
-} from "./commands/commands.js";
-import { handlerLogin, handlerRegister, handlerUsers } from "./commands/users";
-import { handlerReset } from "./commands/reset.js";
+} from "./commands/commands";
+import {
+    handlerListUsers,
+    handlerLogin,
+    handlerRegister
+} from "./commands/users";
+import { handlerReset } from "./commands/reset";
 
 async function main() {
     // get any additionally passed arguments 
@@ -22,7 +26,7 @@ async function main() {
     registerCommand(commandsRegistry, "login", handlerLogin);
     registerCommand(commandsRegistry, "register", handlerRegister);
     registerCommand(commandsRegistry, "reset", handlerReset);
-    registerCommand(commandsRegistry, "users", handlerUsers);
+    registerCommand(commandsRegistry, "users", handlerListUsers);
     //
     try {
         await runCommand(commandsRegistry, cmdName, ...cmdArgs);

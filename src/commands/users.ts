@@ -1,5 +1,5 @@
-import { readConfig, setUser } from 'src/config';
-import { createUser, getUser, getUsers } from 'src/lib/db/queries/users';
+import { readConfig, setUser } from '../config';
+import { createUser, getUser, getUsers } from '../lib/db/queries/users';
 
 export async function handlerLogin(cmdName: string, ...args: string[]) {
     if (args.length !== 1) {
@@ -32,20 +32,20 @@ export async function handlerRegister(cmdName: string, ...args: string[]) {
     console.log('User created successfully!');
 }
 
-export async function handlerUsers(_: string) {
+export async function handlerListUsers(_: string) {
     const users = await getUsers();
     if (users.length === 0) {
         throw new Error(`Application currently doesn't have any users`);
     }
+    //
     const config = readConfig();
     const currentUser = config.currentUserName;
     //
     for (const user of users) {
         if (user.name === currentUser) {
-            console.log(`${user.name} (current)`)
-        } else {
-            console.log(`${user.name}`)
+            console.log(`* ${user.name} (current)`);
+            continue;
         }
+        console.log(`* ${user.name}`)
     }
-    //
 }
