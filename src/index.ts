@@ -3,7 +3,8 @@ import {
     registerCommand,
     runCommand
 } from "./commands/commands.js";
-import { handlerLogin, handlerRegister, handlerReset } from "./commands/users";
+import { handlerLogin, handlerRegister } from "./commands/users";
+import { handlerReset } from "./commands/reset.js";
 
 async function main() {
     // get any additionally passed arguments 
