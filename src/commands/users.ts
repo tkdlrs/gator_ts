@@ -25,7 +25,7 @@ export async function handlerRegister(cmdName: string, ...args: string[]) {
     const userName = args[0];
     const user = await createUser(userName);
     if (!user) {
-        throw new Error(`User ${userName} not found`)
+        throw new Error(`User ${userName} not found`);
     }
     //
     setUser(user.name);

@@ -9,6 +9,7 @@ import {
     handlerRegister
 } from "./commands/users";
 import { handlerReset } from "./commands/reset";
+import { handlerAgg } from "./commands/agg";
 
 async function main() {
     // get any additionally passed arguments 
@@ -27,6 +28,7 @@ async function main() {
     registerCommand(commandsRegistry, "register", handlerRegister);
     registerCommand(commandsRegistry, "reset", handlerReset);
     registerCommand(commandsRegistry, "users", handlerListUsers);
+    registerCommand(commandsRegistry, "agg", handlerAgg);
     //
     try {
         await runCommand(commandsRegistry, cmdName, ...cmdArgs);
