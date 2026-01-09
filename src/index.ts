@@ -9,7 +9,7 @@ import {
     handlerRegister
 } from "./commands/users";
 import { handlerReset } from "./commands/reset";
-import { handlerAgg } from "./commands/agg";
+import { handlerAgg } from "./commands/aggregate";
 
 async function main() {
     // get any additionally passed arguments 
