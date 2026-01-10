@@ -1,6 +1,6 @@
 import { readConfig } from "src/config";
-import { createFeed, getFeedsWithUser } from "src/lib/db/queries/feeds";
-import { getUser } from "src/lib/db/queries/users";
+import { createFeed, getFeeds } from "src/lib/db/queries/feeds";
+import { getUser, getUserById } from "src/lib/db/queries/users";
 import { Feed, User } from "src/lib/db/schema";
 
 
@@ -44,20 +44,30 @@ function printFeed(feed: Feed, user: User) {
 
 
 export async function handlerListFeeds(_: string) {
-    const feedsAndUsers = await getFeedsWithUser();
+    const feeds = await getFeeds();
     //
-    for (const item of feedsAndUsers) {
-        const feed = item.feeds;
-        const user = item.users;
-        //
-        if (!feed || !user) {
-            continue;
-            // throw new Error('No feed or user provided')
+    if (feeds.length === 0) {
+        console.log(`No feeds found.`);
+        return;
+    }
+    //
+    console.log(`Found %d feeds:\n`, feeds.length);
+    const memoizedUsers: Record<string, User> = {};
+    for (let feed of feeds) {
+        let user;
+        if (memoizedUsers.hasOwnProperty(feed.userId)) {
+            user = memoizedUsers[feed.userId];
+        } else {
+            //
+            user = await getUserById(feed.userId);
+            if (!user) {
+                throw new Error(`Failed to find user for feed ${feed.id}`);
+            };
+            //
+            memoizedUsers[feed.userId] = user;
         }
         //
-        console.log(` * Feed Name:           ${feed.name}`);
-        console.log(` * Feed URL:            ${feed.url}`);
-        console.log(` * Created By:          ${user.name}`);
-        console.log(`--------------------------------------------------`);
+        printFeed(feed, user);
+        console.log(`=====================================`);
     };
 };

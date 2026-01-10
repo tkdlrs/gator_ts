@@ -18,7 +18,8 @@ export async function createFeed(
     return firstOrUndefined(result);
 };
 
-export async function getFeedsWithUser() {
-    return db.select().from(feeds).fullJoin(users, eq(users.id, feeds.userId));
+export async function getFeeds() {
+    const result = db.select().from(feeds);
+    return result;
 };
 
