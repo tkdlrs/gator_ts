@@ -1,5 +1,6 @@
+import { eq } from "drizzle-orm";
 import { db } from "..";
-import { feeds } from "../schema";
+import { feeds, users } from "../schema";
 import { firstOrUndefined } from "./utils";
 
 export async function createFeed(
@@ -15,5 +16,9 @@ export async function createFeed(
         }).returning();
     //
     return firstOrUndefined(result);
-}
+};
+
+export async function getFeedsWithUser() {
+    return db.select().from(feeds).fullJoin(users, eq(users.id, feeds.userId));
+};
 

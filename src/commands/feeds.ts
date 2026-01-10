@@ -1,5 +1,5 @@
 import { readConfig } from "src/config";
-import { createFeed } from "src/lib/db/queries/feeds";
+import { createFeed, getFeedsWithUser } from "src/lib/db/queries/feeds";
 import { getUser } from "src/lib/db/queries/users";
 import { Feed, User } from "src/lib/db/schema";
 
@@ -40,3 +40,24 @@ function printFeed(feed: Feed, user: User) {
     //
     return;
 }
+
+
+
+export async function handlerListFeeds(_: string) {
+    const feedsAndUsers = await getFeedsWithUser();
+    //
+    for (const item of feedsAndUsers) {
+        const feed = item.feeds;
+        const user = item.users;
+        //
+        if (!feed || !user) {
+            continue;
+            // throw new Error('No feed or user provided')
+        }
+        //
+        console.log(` * Feed Name:           ${feed.name}`);
+        console.log(` * Feed URL:            ${feed.url}`);
+        console.log(` * Created By:          ${user.name}`);
+        console.log(`--------------------------------------------------`);
+    };
+};
