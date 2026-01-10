@@ -15,6 +15,13 @@
       "when": 1768000853019,
       "tag": "0001_aberrant_unicorn",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1768003557469,
+      "tag": "0002_long_agent_brand",
+      "breakpoints": true
     }
   ]
 }

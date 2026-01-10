@@ -1,36 +1,42 @@
 import { readConfig } from "src/config";
 import { createFeed } from "src/lib/db/queries/feeds";
 import { getUser } from "src/lib/db/queries/users";
-import { feeds, users } from "src/lib/db/schema";
+import { Feed, User } from "src/lib/db/schema";
 
 
 export async function handlerAddFeed(cmdName: string, ...args: string[]) {
     if (args.length !== 2) {
-        throw new Error(`usage: ${cmdName} <name> <url>`)
+        throw new Error(`usage: ${cmdName} <feed_name> <url>`)
+    }
+    //
+    const config = readConfig();
+    const currentUserName = config.currentUserName;
+    const user = await getUser(currentUserName);
+    if (!user) {
+        throw new Error(`User not found in database`);
     }
     //
     const name = args[0];
     const url = args[1];
     //
-    const config = readConfig();
-    const currentUserName = config.currentUserName;
-    const databaseUser = await getUser(currentUserName);
-    if (!databaseUser) {
-        throw new Error(`User not found in database`);
+    const feed = await createFeed(name, url, user.id);
+    if (!feed) {
+        throw new Error(`Failed to create feed`);
     }
     //
-    const feed = await createFeed(name, url, databaseUser.id);
-    printFeed(feed, databaseUser);
-    //
+    console.log("Feed created successfully:")
+    printFeed(feed, user);
     return;
 }
 
-//
-export type Feed = typeof feeds.$inferSelect;
-export type User = typeof users.$inferSelect;
-//
-export function printFeed(feed: Feed, user: User) {
-    console.log("user", user);
-    console.log("feed", feed);
+// This is a helper function. It does not need to be exported.
+function printFeed(feed: Feed, user: User) {
+    console.log(`* ID:          ${feed.id}`);
+    console.log(`* Created:     ${feed.createdAt}`);
+    console.log(`* Updated:     ${feed.updatedAt}`);
+    console.log(`* Name:        ${feed.name}`);
+    console.log(`* URL:         ${feed.url}`);
+    console.log(`* User:        ${user.name}`);
+    //
     return;
 }
