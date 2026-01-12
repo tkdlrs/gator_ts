@@ -1,0 +1,4 @@
+{
+    "editor.inlineSuggest.edits.allowCodeShifting": "never",
+    "terminal.integrated.suggest.inlineSuggestion": "off"
+}
