@@ -65,9 +65,12 @@ export async function handlerUnfollow(
         throw new Error(`Feed not found: ${feedURL}`)
     }
     //
-    await deleteFeedFollow(user.id, feed.id);
+    const result = await deleteFeedFollow(user.id, feed.id);
+    if (!result) {
+        throw new Error(`Failed to unfollow feed: ${feedURL}`);
+    }
     //
-    console.log(`Feed follow deleted`);
+    console.log(`%s unfollowed successfully!`, feed.name);
     //
     return;
 }

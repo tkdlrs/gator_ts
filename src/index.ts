@@ -11,7 +11,11 @@ import {
 import { handlerReset } from "./commands/reset";
 import { handlerAgg } from "./commands/aggregate";
 import { handlerAddFeed, handlerListFeeds } from "./commands/feeds";
-import { handlerFollow, handlerListFeedFollows, handlerUnfollow } from "./commands/feed-follows";
+import {
+    handlerFollow,
+    handlerListFeedFollows,
+    handlerUnfollow,
+} from "./commands/feed-follows";
 import { middlewareLoggedIn } from "./middleware";
 
 //
