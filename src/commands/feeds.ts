@@ -6,22 +6,19 @@ import { createFeedFollow } from "src/lib/db/queries/feed-follows";
 import { printFeedFollow } from "./feed-follows";
 
 
-export async function handlerAddFeed(cmdName: string, ...args: string[]) {
+export async function handlerAddFeed(
+    cmdName: string,
+    user: User,
+    ...args: string[]
+) {
     if (args.length !== 2) {
         throw new Error(`usage: ${cmdName} <feed_name> <url>`)
     }
     //
-    const config = readConfig();
-    const currentUserName = config.currentUserName;
-    const user = await getUser(currentUserName);
-    if (!user) {
-        throw new Error(`User not found in database`);
-    }
-    //
-    const name = args[0];
+    const feedName = args[0];
     const url = args[1];
     //
-    const feed = await createFeed(name, url, user.id);
+    const feed = await createFeed(feedName, url, user.id);
     if (!feed) {
         throw new Error(`Failed to create feed`);
     }
@@ -46,11 +43,9 @@ function printFeed(feed: Feed, user: User) {
     return;
 }
 
-
-
+//
 export async function handlerListFeeds(_: string) {
     const feeds = await getFeeds();
-    //
     if (feeds.length === 0) {
         console.log(`No feeds found.`);
         return;

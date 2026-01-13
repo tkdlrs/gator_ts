@@ -3,21 +3,16 @@ import {
     createFeedFollow,
     getFeedFollowsForUser,
 } from "../lib/db/queries/feed-follows";
-import { readConfig } from "src/config";
-import { getUser } from "src/lib/db/queries/users";
+import { User } from "src/lib/db/schema";
 
 //
-export async function handlerFollow(cmdName: string, ...args: string[]) {
+export async function handlerFollow(
+    cmdName: string,
+    user: User,
+    ...args: string[]
+) {
     if (args.length !== 1) {
         throw new Error(`usage: ${cmdName} <feed_url>`);
-    }
-    //
-    const config = readConfig();
-    const currentUserName = config.currentUserName;
-    const user = await getUser(currentUserName);
-    //
-    if (!user) {
-        throw new Error(`User ${currentUserName} not found`);
     }
     //
     const feedURL = args[0];
@@ -34,15 +29,7 @@ export async function handlerFollow(cmdName: string, ...args: string[]) {
     return;
 }
 //
-export async function handlerListFeedFollows(_: string) {
-    const config = readConfig();
-    const currentUserName = config.currentUserName;
-    const user = await getUser(currentUserName);
-    //
-    if (!user) {
-        throw new Error(`User ${currentUserName} not found`);
-    }
-    //
+export async function handlerListFeedFollows(_: string, user: User) {
     const feedFollow = await getFeedFollowsForUser(user.id);
     if (feedFollow.length === 0) {
         console.log(`No feed follow found for this user.`);
