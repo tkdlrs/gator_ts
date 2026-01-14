@@ -36,28 +36,31 @@ export async function fetchFeed(feedURL: string) {
         throw new Error(`feed is missing channel.`);
     }
     // Confirm metadata on channel
-    if (!channel.title ||
+    if (
+        !channel ||
+        !channel.title ||
         !channel.link ||
         !channel.description ||
         !channel.item
     ) {
-        throw new Error(`failed to parse channel. Channel is missing either a title, link, description, or item`);
+        // Channel is missing either a title, link, description, or item
+        throw new Error(`failed to parse channel `);
     }
     const items: any[] = Array.isArray(channel.item) ? channel.item : [channel.item];
     //
     const rssItems: RSSItem[] = [];
     //
-    for (const feedItem of items) {
+    for (const item of items) {
         // Guard clause to remove items with incomplete data.
-        if (!feedItem.title || !feedItem.link || !feedItem.description || !feedItem.pubDate) {
+        if (!item.title || !item.link || !item.description || !item.pubDate) {
             continue;
         }
         //
         rssItems.push({
-            title: feedItem.title,
-            link: feedItem.link,
-            description: feedItem.description,
-            pubDate: feedItem.pubDate
+            title: item.title,
+            link: item.link,
+            description: item.description,
+            pubDate: item.pubDate
         });
     };
     //
