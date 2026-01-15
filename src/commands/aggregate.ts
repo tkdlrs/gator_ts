@@ -1,7 +1,8 @@
 import { getNextFeedToFetch, markFeedFetched } from "src/lib/db/queries/feeds";
 import { fetchFeed } from "src/lib/rss";
-import { Feed } from "src/lib/db/schema";
+import { Feed, NewPost } from "src/lib/db/schema";
 import { parseDuration } from "src/lib/time";
+import { createPost } from "src/lib/db/queries/posts";
 
 
 export async function handlerAgg(cmdName: string, ...args: string[]) {
@@ -50,8 +51,27 @@ async function scrapeFeed(feed: Feed) {
     await markFeedFetched(feed.id);
     // fetch feed using URL
     const feedData = await fetchFeed(feed.url);
-    // iterate items in feed and print titles to console
-    console.log(`Feed ${feed.name} collected, ${feedData.channel.item.length} posts found`);
+    // iterate items in feed and save them to the database
+    const feedItems = feedData.channel.item;
+    for (let item of feedItems) {
+        console.log(`Found post: %s`, item.title);
+        //
+        const now = new Date();
+        //
+        const post = ({
+            url: item.link,
+            feedId: feed.id,
+            title: item.title,
+            createdAt: now,
+            updatedAt: now,
+            description: item.description,
+            publishedAt: new Date(item.pubDate),
+        } satisfies NewPost);
+        //
+        await createPost(post)
+    };
+    //
+    console.log(`Feed ${feed.name} collected, ${feedItems.length} posts found`);
 }
 // 
 function handleError(err: unknown) {

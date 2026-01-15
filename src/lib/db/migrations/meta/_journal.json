@@ -43,6 +43,27 @@
       "when": 1768357089079,
       "tag": "0005_right_slipstream",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1768439302658,
+      "tag": "0006_lazy_jigsaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1768439527913,
+      "tag": "0007_regular_madripoor",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1768440592806,
+      "tag": "0008_clear_boom_boom",
+      "breakpoints": true
     }
   ]
 }
