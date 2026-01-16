@@ -43,7 +43,8 @@ It's a blog aggregator, so it stores lists of URLs from various blog feeds in a 
 - "unfollow": Allows a user to stop following a feed,
 - "browse": Lets you view the information of the posts in a feed that you are following,
 
-====================================================================================================
+---
+
 I highly recommend going to Boot.dev and doing the course yourself.
 I got a lot out of it and had fun learning.
 
